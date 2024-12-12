@@ -27,20 +27,17 @@ public class Kho {
     }
 
     public void timSanPhamGiaTriTonKhoCaoNhatVaThapNhat() {
-        if (danhSachSanPham.isEmpty()) {
-            System.out.println("Kho hien khong co san pham nao.");
-            return;
-        }
-
-        SanPham sanPhamCaoNhat = danhSachSanPham.stream()
-                .max((sp1, sp2) -> Double.compare(sp1.tinhGiaTriTonKho(), sp2.tinhGiaTriTonKho()))
-                .orElse(null);
-
-        SanPham sanPhamThapNhat = danhSachSanPham.stream()
-                .min((sp1, sp2) -> Double.compare(sp1.tinhGiaTriTonKho(), sp2.tinhGiaTriTonKho()))
-                .orElse(null);
-
-        System.out.println("San pham co gia tri ton kho cao nhat: " + sanPhamCaoNhat);
-        System.out.println("San pham co gia tri ton kho thap nhat: " + sanPhamThapNhat);
+    if (danhSachSanPham.isEmpty()) {
+        System.out.println("Kho hien khong co san pham nao.");
+        return;
     }
+
+    danhSachSanPham.sort((sp1, sp2) -> Double.compare(sp1.tinhGiaTriTonKho(), sp2.tinhGiaTriTonKho()));
+
+    SanPham sanPhamThapNhat = danhSachSanPham.get(0);
+    SanPham sanPhamCaoNhat = danhSachSanPham.get(danhSachSanPham.size() - 1);
+
+    System.out.println("San pham co gia tri ton kho cao nhat: " + sanPhamCaoNhat);
+    System.out.println("San pham co gia tri ton kho thap nhat: " + sanPhamThapNhat);
+}
 }
