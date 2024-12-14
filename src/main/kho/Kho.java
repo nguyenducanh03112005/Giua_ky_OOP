@@ -1,9 +1,12 @@
 package main.kho;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import main.sanPham.SanPham;
+import main.sanPham.SanPhamDungCuHocTap;
+import main.sanPham.SanPhamSach;
 
 public class Kho {
     private List<SanPham> danhSachSanPham;
@@ -27,17 +30,34 @@ public class Kho {
     }
 
     public void timSanPhamGiaTriTonKhoCaoNhatVaThapNhat() {
-    if (danhSachSanPham.isEmpty()) {
-        System.out.println("Kho hien khong co san pham nao.");
-        return;
-    }
+    List<SanPhamSach> danhSachSach = danhSachSanPham.stream()
+        .filter(sanPham -> sanPham instanceof SanPhamSach)
+        .map(sanPham -> (SanPhamSach) sanPham)
+        .toList();
 
-    danhSachSanPham.sort((sp1, sp2) -> Double.compare(sp1.tinhGiaTriTonKho(), sp2.tinhGiaTriTonKho()));
+    List<SanPhamDungCuHocTap> danhSachDungCu = danhSachSanPham.stream()
+        .filter(sanPham -> sanPham instanceof SanPhamDungCuHocTap)
+        .map(sanPham -> (SanPhamDungCuHocTap) sanPham)
+        .toList();
 
-    SanPham sanPhamThapNhat = danhSachSanPham.get(0);
-    SanPham sanPhamCaoNhat = danhSachSanPham.get(danhSachSanPham.size() - 1);
+    SanPhamSach sachCaoNhat = danhSachSach.stream()
+        .max(Comparator.comparingDouble(SanPham::tinhGiaTriTonKho))
+        .orElse(null);
+    SanPhamSach sachThapNhat = danhSachSach.stream()
+        .min(Comparator.comparingDouble(SanPham::tinhGiaTriTonKho))
+        .orElse(null);
 
-    System.out.println("San pham co gia tri ton kho cao nhat: " + sanPhamCaoNhat);
-    System.out.println("San pham co gia tri ton kho thap nhat: " + sanPhamThapNhat);
+    SanPhamDungCuHocTap dungCuCaoNhat = danhSachDungCu.stream()
+        .max(Comparator.comparingDouble(SanPham::tinhGiaTriTonKho))
+        .orElse(null);
+    SanPhamDungCuHocTap dungCuThapNhat = danhSachDungCu.stream()
+        .min(Comparator.comparingDouble(SanPham::tinhGiaTriTonKho))
+        .orElse(null);
+
+    System.out.println("San pham sach co gia tri ton kho cao nhat: " + (sachCaoNhat != null ? sachCaoNhat : "Không có"));
+    System.out.println("San pham sach co gia tri ton kho thap nhat: " + (sachThapNhat != null ? sachThapNhat : "Không có"));
+    System.out.println("San pham dung cu hoc tap co gia tri ton kho cao nhat: " + (dungCuCaoNhat != null ? dungCuCaoNhat : "Không có"));
+    System.out.println("San pham dung cu hoc tap co gia tri ton kho thap nhat: " + (dungCuThapNhat != null ? dungCuThapNhat : "Không có"));
 }
+
 }
